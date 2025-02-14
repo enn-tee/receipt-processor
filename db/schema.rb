@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_14_163528) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_14_190446) do
   create_table "items", force: :cascade do |t|
     t.string "short_description", null: false
     t.integer "price_cents", null: false
@@ -27,6 +27,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_14_163528) do
     t.integer "total_cents", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "external_id"
+    t.index ["external_id"], name: "index_receipts_on_external_id", unique: true
   end
 
   add_foreign_key "items", "receipts"
