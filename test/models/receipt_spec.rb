@@ -37,14 +37,14 @@ RSpec.describe Receipt, type: :model do
         receipt = build(:receipt, external_id: "valid-id-123")
         expect(receipt).to be_valid
       end
-  
+
       it "rejects external_ids with whitespace" do
         receipt = build(:receipt, external_id: "invalid id")
         expect(receipt).not_to be_valid
         expect(receipt.errors[:external_id]).to include("can only contain non-whitespace characters")
       end
     end
-  
+
     context "retailer format" do
       it "allows valid retailer names" do
         valid_names = %w[ Walmart Target-Store H&M Best Buy 123 ]
@@ -53,7 +53,7 @@ RSpec.describe Receipt, type: :model do
           expect(receipt).to be_valid
         end
       end
-  
+
       it "rejects invalid retailer names" do
         invalid_names = %w[ Store! Retail@Shop Store$123 ]
         invalid_names.each do |name|
