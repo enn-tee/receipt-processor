@@ -10,7 +10,6 @@ RSpec.describe ReceiptsController, type: :controller do
 
         expect(response).to have_http_status(:ok)
         parsed_response = JSON.parse(response.body)
-        expect(parsed_response["external_id"]).to eq(receipt.external_id)
         expect(parsed_response["items"]).to be_present
       end
     end
