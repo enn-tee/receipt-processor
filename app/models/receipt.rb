@@ -16,19 +16,33 @@ class Receipt < ApplicationRecord
   validates :items, presence: true
 
   validate :must_have_at_least_one_item
+  validate :total_is_valid_number
 
   def total
     total_cents.to_f / 100 if total_cents
   end
 
   def total=(amount)
-    self.total_cents = (amount.to_f * 100).round if amount.present?
+    if amount.present?
+      # Check if amount is a valid decimal number
+      if amount.to_s.match?(/\A\d+(\.\d{1,2})?\z/)
+        self.total_cents = (amount.to_f * 100).round
+      else
+        self.total_cents = nil  # Force numericality validation to fail
+      end
+    end
   end
 
   private
 
   def must_have_at_least_one_item
     errors.add(:items, "must have at least one item") if items.empty?
+  end
+
+  def total_is_valid_number
+    if total_cents.nil?
+      errors.add(:total, "must be a valid number")
+    end
   end
 
   def generate_external_id
