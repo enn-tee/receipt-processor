@@ -1,14 +1,32 @@
 #!/bin/bash -e
 
+echo "Starting entrypoint script..."
+
 # Enable jemalloc for reduced memory usage and latency.
 if [ -z "${LD_PRELOAD+x}" ]; then
+    echo "LD_PRELOAD not set, configuring jemalloc..."
     LD_PRELOAD=$(find /usr/lib -name libjemalloc.so.2 -print -quit)
     export LD_PRELOAD
+    echo "Set LD_PRELOAD to: $LD_PRELOAD"
+else
+    echo "LD_PRELOAD already set to: $LD_PRELOAD"
 fi
 
-# If running the rails server then create or migrate existing database
-if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
-  ./bin/rails db:prepare
+echo "Full command: $@"
+
+# Check if the command includes 'rails' and 'server'
+if echo "$@" | grep -q "rails.*server\|rails.*s"; then
+    echo "Rails server command detected, attempting database migration..."
+    if bundle exec rake db:migrate 2>/dev/null; then
+        echo "Migration successful!"
+    else
+        echo "Migration failed, attempting database setup..."
+        bundle exec rake db:setup
+        echo "Database setup completed!"
+    fi
+else
+    echo "Not running rails server, skipping migration check"
 fi
 
+echo "Executing final command: ${@}"
 exec "${@}"
