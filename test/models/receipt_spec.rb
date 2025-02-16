@@ -117,10 +117,10 @@ RSpec.describe Receipt, type: :model do
       expect(receipt.total_cents).to eq(1234)
     end
 
-    it "rounds to nearest cent" do
+    it "rejects more than two decimal places" do
       receipt = build(:receipt)
       receipt.total = 12.345
-      expect(receipt.total_cents).to eq(1235)
+      expect(receipt.total_cents).to eq(nil)
     end
 
     it "sets nil when input is blank" do

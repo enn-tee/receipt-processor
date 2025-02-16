@@ -74,9 +74,9 @@ RSpec.describe Item, type: :model do
       expect(item.price_cents).to eq(1099)
     end
 
-    it "rounds to nearest cent" do
+    it "rejects more than two decimal places" do
       item = build(:item, price: 10.999)
-      expect(item.price_cents).to eq(1100)
+      expect(item.price_cents).to eq(nil)
     end
 
     it "handles zero correctly" do

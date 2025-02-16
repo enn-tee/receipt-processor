@@ -108,17 +108,17 @@ RSpec.describe ReceiptPointsCalculator do
 
   describe "time of day points" do
     it "awards 10 points for purchases between 2:00pm and 4:00pm" do
-      expect(receipt).to receive(:purchase_time).and_return(Time.parse("14:30"))
+      expect(receipt).to receive(:time_in_hours_minutes_number).twice.and_return(1430)
       expect(calculator.send(:time_of_day_points)).to eq(10)
     end
 
     it "awards 0 points for purchases before 2:00pm" do
-      expect(receipt).to receive(:purchase_time).and_return(Time.parse("13:59"))
+      expect(receipt).to receive(:time_in_hours_minutes_number).once.and_return(1359)
       expect(calculator.send(:time_of_day_points)).to eq(0)
     end
 
     it "awards 0 points for purchases at or after 4:00pm" do
-      expect(receipt).to receive(:purchase_time).and_return(Time.parse("16:00"))
+      expect(receipt).to receive(:time_in_hours_minutes_number).twice.and_return(1600)
       expect(calculator.send(:time_of_day_points)).to eq(0)
     end
   end

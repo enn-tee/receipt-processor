@@ -10,6 +10,10 @@ RSpec.describe ReceiptsController, type: :controller do
 
         expect(response).to have_http_status(:ok)
         parsed_response = JSON.parse(response.body)
+        expect(parsed_response["retailer"]).to eq(receipt.retailer)
+        expect(parsed_response["purchase_date"]).to be_present
+        expect(parsed_response["purchase_time"]).to be_present
+        expect(parsed_response["total"]).to eq(receipt.total)
         expect(parsed_response["items"]).to be_present
       end
     end
@@ -110,12 +114,12 @@ RSpec.describe ReceiptsController, type: :controller do
         }.not_to change(Receipt, :count)
       end
 
-      it "returns unprocessable entity status" do
+      it "returns bad request status" do
         post :create, params: invalid_params
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:bad_request)
         parsed_response = JSON.parse(response.body)
-        expect(parsed_response["errors"]).to be_present
+        expect(parsed_response["description"]).to eq("The receipt is invalid.")
       end
     end
 
@@ -124,12 +128,12 @@ RSpec.describe ReceiptsController, type: :controller do
         valid_params.except(:retailer)
       end
 
-      it "returns unprocessable entity status" do
+      it "returns bad request status" do
         post :create, params: incomplete_params
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:bad_request)
         parsed_response = JSON.parse(response.body)
-        expect(parsed_response["errors"]).to have_key("retailer")
+        expect(parsed_response["description"]).to eq("The receipt is invalid.")
       end
     end
 
@@ -142,12 +146,12 @@ RSpec.describe ReceiptsController, type: :controller do
         end
       end
 
-      it "returns unprocessable entity status" do
+      it "returns bad request status" do
         post :create, params: params_with_invalid_items
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:bad_request)
         parsed_response = JSON.parse(response.body)
-        expect(parsed_response["errors"]).to have_key("items.short_description")
+        expect(parsed_response["description"]).to eq("The receipt is invalid.")
       end
     end
   end
