@@ -46,10 +46,10 @@ class ReceiptsController < ApplicationController
       :purchase_date,
       :purchase_time,
       :total,
-      items: [:short_description, :price]
+      items: [ :short_description, :price ]
     ).tap do |permitted_params|
       # Validate required parameters are present
-      [:retailer, :purchase_date, :purchase_time, :total, :items].each do |key|
+      [ :retailer, :purchase_date, :purchase_time, :total, :items ].each do |key|
         if !permitted_params.key?(key) || permitted_params[key].nil?
           raise ActionController::ParameterMissing.new(key)
         end
@@ -57,7 +57,7 @@ class ReceiptsController < ApplicationController
 
       # Validate each item has required fields
       permitted_params[:items].each do |item|
-        [:short_description, :price].each do |item_key|
+        [ :short_description, :price ].each do |item_key|
           if !item.key?(item_key) || item[item_key].nil?
             raise ActionController::ParameterMissing.new("items.#{item_key}")
           end

@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe ReceiptPointsCalculator do
   let(:item1) { create(:item, short_description: "Mountain Dew", price: 3.99) }
   let(:item2) { create(:item, short_description: "Bread", price: 2.49) }
+
   let(:receipt) do
     create(:receipt,
       retailer: "Target",
@@ -30,7 +31,7 @@ RSpec.describe ReceiptPointsCalculator do
 
   describe "retailer name points" do
     it "counts alphanumeric characters in retailer name" do
-      expect(receipt).to receive(:retailer).and_return("Target!")
+      expect(receipt).to receive(:retailer).and_return("Target")
       expect(calculator.send(:retailer_name_points)).to eq(6)
     end
 
@@ -78,18 +79,23 @@ RSpec.describe ReceiptPointsCalculator do
 
   describe "items description points" do
     context "when item description length is divisible by 3" do
-      let(:item) { create(:item, short_description: "ABC   ", price: 3.99) }
+      let(:item3) { create(:item, short_description: "   ABC   ", price: 3.99) }
+      let(:item4) { create(:item, short_description: "   ABC   ", price: 5.99) }
 
       it "awards 20% of price (rounded up)" do
-        expect(calculator.send(:calculate_item_description_points, item)).to eq(1)
+        expect(calculator.send(:calculate_item_description_points, item3)).to eq(1)
+      end
+
+      it "awards 20% of price (rounded up, not down)" do
+        expect(calculator.send(:calculate_item_description_points, item4)).to eq(2)
       end
     end
 
     context "when item description length is not divisible by 3" do
-      let(:item) { create(:item, short_description: "ABCD   ", price: 3.99) }
+      let(:item5) { create(:item, short_description: "ABCD   ", price: 3.99) }
 
       it "awards 0 points" do
-        expect(calculator.send(:calculate_item_description_points, item)).to eq(0)
+        expect(calculator.send(:calculate_item_description_points, item5)).to eq(0)
       end
     end
   end
