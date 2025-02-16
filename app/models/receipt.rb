@@ -33,6 +33,10 @@ class Receipt < ApplicationRecord
     end
   end
 
+  def time_in_hours_minutes_number
+    purchase_time.strftime("%H%M").to_i
+  end
+
   private
 
   def must_have_at_least_one_item

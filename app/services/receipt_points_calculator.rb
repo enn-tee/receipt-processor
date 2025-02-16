@@ -1,6 +1,9 @@
 class ReceiptPointsCalculator
   attr_reader :receipt
 
+  TWO_PM = 1400
+  FOUR_PM = 1600
+
   def initialize(receipt)
     @receipt = receipt
   end
@@ -24,10 +27,6 @@ class ReceiptPointsCalculator
   end
 
   def retailer_name_points
-    retailer_character_count
-  end
-
-  def retailer_character_count
     receipt.retailer.scan(/[a-zA-Z0-9]/).count
   end
 
@@ -58,9 +57,6 @@ class ReceiptPointsCalculator
   end
 
   def time_of_day_points
-    purchase_time = receipt.purchase_time
-    return 0 unless purchase_time >= Time.parse("14:00")
-    return 0 unless purchase_time < Time.parse("16:00")
-    10
+    receipt.time_in_hours_minutes_number > TWO_PM && receipt.time_in_hours_minutes_number < FOUR_PM ? 10 : 0
   end
 end
