@@ -352,6 +352,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   kamal
+  net-protocol
   puma (>= 5.0)
   rails (~> 8.0.0)
   rspec-rails (~> 7.0.0)
