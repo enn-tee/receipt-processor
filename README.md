@@ -58,6 +58,24 @@ The following quality checks run automatically on Pull Requests and merges to ma
 - **Rubocop**: Enforces code style and best practices
 - **RSpec**: Runs the full test suite
 
+
+### Dependency Management
+
+The project uses GitHub's Dependabot to automatically monitor and update dependencies:
+
+- **Scope:** Monitors both Ruby gems and GitHub Actions
+- **Update Schedule:** Checks for updates daily
+- **Pull Requests:** Automatically creates PRs for:
+
+  - Security updates (high priority)
+  - Version updates for direct dependencies
+  - GitHub Actions version updates
+
+**Configuration:** See [.github/dependabot.yml](.github/dependabot.yml) for detailed settings
+**Auto-merge:** Enabled for patch and minor version updates that pass all checks
+
+Pull Requests from Dependabot trigger the same quality gates as regular PRs, ensuring updates don't break existing functionality.
+
 ## Recent Additions
 
 ### New Features
