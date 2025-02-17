@@ -43,6 +43,15 @@ All model-level validations are implemented within their respective model classe
     - Run any pending migrations
     - Start the application server
 
+4. Use the API!
+   ```
+   # Create a receipt
+   curl -X POST http://localhost:3000/receipts/process -H "Content-Type: application/json" -d '{"retailer": "Target", "purchaseDate": "2022-01-02", "purchaseTime": "13:13", "total": "1.25", "items": [{"shortDescription": "Pepsi - 12-oz", "price": "1.25"}]}'
+
+   # Using the ID returned from the POST: 
+   curl -v http://localhost:3000/receipts/{id}/points
+   ```
+
 ### Running Tests
 You can run the test suite from within the Docker container:
 ```bash
