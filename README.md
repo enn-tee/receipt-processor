@@ -2,7 +2,10 @@
 
 ## Overview
 
-This is an API-only application built with Rails 8 and Ruby 3.3.4. The application uses SQLite as its database, which runs within a single Docker container for simplified deployment and development.
+This is an API-only application built with Rails 8 and Ruby 3.3.4. 
+The application uses SQLite as its database for development and test, which runs within a single Docker container 
+for simplified deployment and development. The docker build and production builds use a single Postgres instance for the main database, 
+cache, and queue instances for reduced cost. 
 
 ## Application Structure
 

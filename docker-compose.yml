@@ -3,13 +3,27 @@ services:
     build: .
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
-      - .:/app
-      - sqlite_data:/app/db
+      - .:/rails
     ports:
       - "3000:3000"
     environment:
       - RAILS_ENV=development
       - RACK_ENV=development
+      - DATABASE_URL=postgres://postgres:password@db:5432/receipt_processor_development
+      - CACHE_DATABASE_URL=postgres://postgres:password@db:5432/receipt_processor_development
+      - QUEUE_DATABASE_URL=postgres://postgres:password@db:5432/receipt_processor_development
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=receipt_processor_development
+    ports:
+      - "5432:5432"
 
 volumes:
-  sqlite_data:
+  postgres_data:
