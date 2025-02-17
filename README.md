@@ -91,3 +91,8 @@ Pull Requests from Dependabot trigger the same quality gates as regular PRs, ens
 ## Deployment
 
 The application automatically deploys to Heroku when changes are merged into the main branch.
+
+## Health Checks
+
+Uptime of the application is being monitored by pingdom using the /up route. 
+Texts and emails will be sent when the application doesn't respond with a 200. 
