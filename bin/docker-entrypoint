@@ -14,9 +14,15 @@ fi
 
 echo "Full command: $@"
 
-# Check if the command includes 'rails' and 'server'
-if echo "$@" | grep -q "rails.*server\|rails.*s"; then
-    echo "Rails server command detected, attempting database migration..."
+# Check if the command includes 'rails server' or 'rspec'
+if echo "$@" | grep -q "rails.*server\|rails.*s\|rspec"; then
+    echo "Rails server or test suite command detected, attempting database migration..."
+
+    if echo "$@" | grep -q "rspec"; then
+        echo "Test suite detected, preparing test database..."
+        bundle exec rake db:test:prepare
+    fi
+
     if bundle exec rake db:migrate 2>/dev/null; then
         echo "Migration successful!"
     else
@@ -25,7 +31,7 @@ if echo "$@" | grep -q "rails.*server\|rails.*s"; then
         echo "Database setup completed!"
     fi
 else
-    echo "Not running rails server, skipping migration check"
+    echo "Not running rails server or tests, skipping migration check"
 fi
 
 echo "Executing final command: ${@}"
