@@ -4,8 +4,7 @@ ruby "3.3.4"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.0.0"
-# Use sqlite3 as the database for Active Record
-gem "sqlite3", ">= 2.1"
+
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 
@@ -24,10 +23,13 @@ gem "kamal", require: false
 # Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
 gem "thruster", require: false
 
-group :development, :test do
-  gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
+group :production do
+  gem "pg"
+end
 
-  # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
+group :development, :test do
+  gem "sqlite3", ">= 2.1"
+  gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
   gem "brakeman", require: false
   gem "rubocop-rails-omakase", require: false
   gem "rspec-rails", "~> 7.0.0"
